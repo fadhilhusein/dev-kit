@@ -7,6 +7,9 @@ Claude Code plugin (and Codex-compatible skills) that bootstraps a project with 
 | `init-git-workflow` | `AGENTS.md` (git branch/worktree rules) + `CLAUDE.md` (`@AGENTS.md`). Any project. |
 | `init-project-lite` | Git rules + `STACK.md` + `.env.example`. Docs only, nothing installed. |
 | `init-project` | Scaffolds the stack (after you approve the command list), then the same docs. |
+| `pencil-design-first` | Design-first gate for new UI: designs in [Pencil](https://pen.dev) via its MCP, saves the `.pen` file in the repo, and waits for your approval before any UI code. Needs the Pencil app and MCP. |
+
+Both `init-project*` skills ask on every run whether to use `pencil-design-first`.
 
 Safety: never overwrites existing files, never creates branches/worktrees/commits/remotes or touches Git config, never writes real credentials. Existing `AGENTS.md`/`CLAUDE.md` are only merged with your approval.
 
@@ -17,7 +20,7 @@ Safety: never overwrites existing files, never creates branches/worktrees/commit
 /plugin install dev-kit@dev-kit
 ```
 
-Skills: `/dev-kit:init-git-workflow`, `/dev-kit:init-project-lite`, `/dev-kit:init-project`.
+Skills: `/dev-kit:init-git-workflow`, `/dev-kit:init-project-lite`, `/dev-kit:init-project`, `/dev-kit:pencil-design-first`.
 
 From a local clone: `/plugin marketplace add /path/to/dev-kit`.
 
@@ -28,12 +31,12 @@ Link each skill folder from a clone (no copies). Skills find `scripts/` and `tem
 macOS / Linux:
 ```bash
 mkdir -p ~/.agents/skills
-for s in init-git-workflow init-project-lite init-project; do ln -s /path/to/dev-kit/skills/$s ~/.agents/skills/$s; done
+for s in init-git-workflow init-project-lite init-project pencil-design-first; do ln -s /path/to/dev-kit/skills/$s ~/.agents/skills/$s; done
 ```
 Windows (PowerShell):
 ```powershell
 New-Item -ItemType Directory -Force "$HOME\.agents\skills" | Out-Null
-foreach ($s in "init-git-workflow","init-project-lite","init-project") {
+foreach ($s in "init-git-workflow","init-project-lite","init-project","pencil-design-first") {
   New-Item -ItemType Junction -Path "$HOME\.agents\skills\$s" -Target "C:\path\to\dev-kit\skills\$s"
 }
 ```
@@ -43,7 +46,7 @@ foreach ($s in "init-git-workflow","init-project-lite","init-project") {
 ```
 dev-kit/
 ├── .claude-plugin/{plugin.json, marketplace.json}
-├── skills/{init-git-workflow, init-project-lite, init-project}/SKILL.md
+├── skills/{init-git-workflow, init-project-lite, init-project, pencil-design-first}/SKILL.md
 ├── templates/git/{AGENTS.md, CLAUDE.md}      # git rules: single source
 ├── templates/stack/{STACK.md, env.example}   # stack rules: single source
 └── scripts/{install.py, scaffold.py}         # Python 3 stdlib only; macOS, Linux, Windows
