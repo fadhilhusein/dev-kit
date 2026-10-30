@@ -1,10 +1,10 @@
 {
   "name": "dev-kit",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Project bootstrap skills: Git branch/worktree workflow rules and a Next.js + Tailwind + Motion + Prisma + PostgreSQL web stack standard (docs-only or with scaffold).",
   "author": { "name": "fadhilhusein", "url": "https://github.com/fadhilhusein" },
   "homepage": "https://github.com/fadhilhusein/dev-kit",
   "repository": "https://github.com/fadhilhusein/dev-kit",
   "license": "MIT",
-  "keywords": ["git", "worktree", "agents-md", "nextjs", "tailwind", "prisma", "scaffold", "pencil", "design"]
+  "keywords": ["git", "worktree", "agents-md", "nextjs", "tailwind", "prisma", "scaffold", "pencil", "design", "tailwind", "components"]
 }

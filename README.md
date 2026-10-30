@@ -8,8 +8,11 @@ Claude Code plugin (and Codex-compatible skills) that bootstraps a project with 
 | `init-project-lite` | Git rules + `STACK.md` + `.env.example`. Docs only, nothing installed. |
 | `init-project` | Scaffolds the stack (after you approve the command list), then the same docs. |
 | `pencil-design-first` | Design-first gate for new UI: designs in [Pencil](https://pen.dev) via its MCP, saves the `.pen` file in the repo, and waits for your approval before any UI code. Needs the Pencil app and MCP. |
+| `tailwind-components` | Builds UI from the bundled Tailwind v4 React library (704 components): reads a 3 KB index, copies only the needed components into the project as TypeScript. |
 
-Both `init-project*` skills ask on every run whether to use `pencil-design-first`.
+Both `init-project*` skills ask on every run whether to use `pencil-design-first` and `tailwind-components`.
+
+> **This repository must stay private.** `assets/tailwind-components/` contains Tailwind Plus components that may not be redistributed in source form (see [NOTICE](assets/tailwind-components/NOTICE.md)). Do not make the repo public or share `assets/`.
 
 Safety: never overwrites existing files, never creates branches/worktrees/commits/remotes or touches Git config, never writes real credentials. Existing `AGENTS.md`/`CLAUDE.md` are only merged with your approval.
 
@@ -20,7 +23,9 @@ Safety: never overwrites existing files, never creates branches/worktrees/commit
 /plugin install dev-kit@dev-kit
 ```
 
-Skills: `/dev-kit:init-git-workflow`, `/dev-kit:init-project-lite`, `/dev-kit:init-project`, `/dev-kit:pencil-design-first`.
+Skills: `/dev-kit:init-git-workflow`, `/dev-kit:init-project-lite`, `/dev-kit:init-project`, `/dev-kit:pencil-design-first`, `/dev-kit:tailwind-components`.
+
+Installing from a private repo needs GitHub authentication on that machine (e.g. `gh auth login`).
 
 From a local clone: `/plugin marketplace add /path/to/dev-kit`.
 
@@ -31,12 +36,12 @@ Link each skill folder from a clone (no copies). Skills find `scripts/` and `tem
 macOS / Linux:
 ```bash
 mkdir -p ~/.agents/skills
-for s in init-git-workflow init-project-lite init-project pencil-design-first; do ln -s /path/to/dev-kit/skills/$s ~/.agents/skills/$s; done
+for s in init-git-workflow init-project-lite init-project pencil-design-first tailwind-components; do ln -s /path/to/dev-kit/skills/$s ~/.agents/skills/$s; done
 ```
 Windows (PowerShell):
 ```powershell
 New-Item -ItemType Directory -Force "$HOME\.agents\skills" | Out-Null
-foreach ($s in "init-git-workflow","init-project-lite","init-project","pencil-design-first") {
+foreach ($s in "init-git-workflow","init-project-lite","init-project","pencil-design-first","tailwind-components") {
   New-Item -ItemType Junction -Path "$HOME\.agents\skills\$s" -Target "C:\path\to\dev-kit\skills\$s"
 }
 ```
@@ -46,17 +51,19 @@ foreach ($s in "init-git-workflow","init-project-lite","init-project","pencil-de
 ```
 dev-kit/
 ├── .claude-plugin/{plugin.json, marketplace.json}
-├── skills/{init-git-workflow, init-project-lite, init-project, pencil-design-first}/SKILL.md
+├── skills/{init-git-workflow, init-project-lite, init-project, pencil-design-first, tailwind-components}/SKILL.md
 ├── templates/git/{AGENTS.md, CLAUDE.md}      # git rules: single source
-├── templates/stack/{STACK.md, env.example}   # stack rules: single source
-└── scripts/{install.py, scaffold.py}         # Python 3 stdlib only; macOS, Linux, Windows
+├── templates/stack/{STACK.md, UI-COMPONENTS.md, env.example}   # stack rules: single source
+├── assets/tailwind-components/{NOTICE.md, INDEX.md, react/components/}   # private library
+└── scripts/{install.py, scaffold.py, build_index.py}   # Python 3 stdlib only; macOS, Linux, Windows
 ```
 
 ## Scripts
 
 ```bash
-python scripts/install.py [project] [--profile git|lite] [--dry-run]
-python scripts/scaffold.py <dir> [--pm npm|pnpm|yarn|bun] [--allow-nonempty] [--run]   # prints commands unless --run
+python scripts/install.py [project] [--profile git|lite] [--ui-components] [--dry-run]
+python scripts/scaffold.py <dir> [--pm npm|pnpm|yarn|bun] [--allow-nonempty] [--with-ui] [--run]   # prints commands unless --run
+python scripts/build_index.py   # regenerate assets/tailwind-components/INDEX.md after changing the library
 ```
 
 ## Customize

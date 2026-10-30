@@ -33,6 +33,7 @@ def main() -> int:
     ap.add_argument("project", help="target dir (created if missing; '.' for current)")
     ap.add_argument("--pm", choices=PM, default="npm")
     ap.add_argument("--allow-nonempty", action="store_true")
+    ap.add_argument("--with-ui", action="store_true", help="also add @headlessui/react @heroicons/react (Tailwind component library deps)")
     ap.add_argument("--run", action="store_true", help="execute (default: print only)")
     args = ap.parse_args()
 
@@ -52,7 +53,7 @@ def main() -> int:
     cmds = [
         (root.parent, f'{ex} create-next-app@latest "{root.name}" --yes --ts --tailwind --eslint --app --src-dir '
                       f'--import-alias "@/*" --no-agents-md {flag}'),
-        (root, f"{add} motion @prisma/client @prisma/adapter-pg"),
+        (root, f"{add} motion @prisma/client @prisma/adapter-pg" + (" @headlessui/react @heroicons/react" if args.with_ui else "")),
         (root, f"{add_dev} prisma dotenv"),
         (root, f"{ex} prisma init --datasource-provider postgresql"),
     ]
