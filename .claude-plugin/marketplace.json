@@ -1,0 +1,14 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dev-kit",
+  "description": "Marketplace for the dev-kit plugin: git workflow rules and web project init.",
+  "owner": { "name": "fadhilhusein", "url": "https://github.com/fadhilhusein" },
+  "plugins": [
+    {
+      "name": "dev-kit",
+      "description": "Git workflow rules + web project init (Next.js, Tailwind, Motion, Prisma, PostgreSQL).",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
